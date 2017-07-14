@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="author" content="Benjamin Ramirez">
+
+  <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+!-- =============PAGE CONTENT ======================= -->
+<div class="container" id="content">
+
+    <div class="row text-center">
+        <h1>FacePlus API Image Analysis</h1>
+    </div>
+
+    <div class="row">
+        <!-- the input section -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="input-url">Enter URL:</label>
+                <input type="text" class="form-control" id="input-url">
+                <button id="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+
+        <!-- The output section -->
+        <div class="col-sm-6 text-center">
+
+            <h2>Faceplus Response:</h2>
+            <div id="faceplus-output">
+                Click submit you must.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 text-center">
+            Leveraging the Mashape API:
+            <a href="https://market.mashape.com/faceplusplus/faceplusplus-face-detection">
+                https://market.mashape.com/faceplusplus/faceplusplus-face-detection
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- =================== END OF PAGE CONTENT =================== -->
+
+
+
+<!-- =================== JavaScript ========================= -->
+<!-- scripts, jQuery for AJAX API calls-->
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+</script>
+<!-- Bootstrap's js script -->
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- application script to communicate with the Flask backend -->
+<script type="text/javascript">
+
+    $(document).on('click','#submit',function () {
+
+        console.log("clicked on submit!");
+        var words = $('#input-url');
+        console.log(words);
+        //set output to processing gif while we wait for ajax response
+        var gif =  "<div class='text-center'> Processing...<br/><img class='text-center' src='https://railsgirlssummerofcode.org/img/blog/2016/l1ghtsab3r-partyparrot.gif'/> </div>";
+        $("#faceplus-output").html(gif);
+        $.ajax({
+            url:'/api/faceplus',
+            method: 'POST',
+            contentType: 'text/plain',
+            data: words,
+            success: function(result){
+                $("#faceplus-output").html(JSON.parse(result).success);
+            },
+        });
+    });
+
+</script>
+
+</body>
+</html>
